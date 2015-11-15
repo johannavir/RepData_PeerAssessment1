@@ -5,20 +5,85 @@ output:
     keep_md: true
 ---
 
+##Assignment only partly completed, started too late
+
 ## Loading and preprocessing the data
-
-
+```{r echo = TRUE}
+      data <- read.csv("activity.csv")
+```{r}
+  
 
 ## What is mean total number of steps taken per day?
-
+```{r echo = TRUE}
+    
+      s <-split(data,data$"date")
+      tb = lapply(s, function(x) colSums(x[,c("steps","interval")], na.rm = FALSE))
+      df<-data.frame(Reduce(rbind, tb))
+      colnames(df) <- c("SumOfSteps","Interval")
+      hist(df$"SumOfSteps", 
+      main="Histogram of total number of steps taken per day during two months", 
+      xlab="Number of steps", 
+      xlim=c(0, 22000),
+      border="blue", 
+      col="green",
+      breaks=22,
+      las=1)
+    
+      ##Mean of steps
+      by(data[, "steps"], data[, "date"], mean)
+     
+      ##Median of steps
+      by(data[, "steps"], data[, "date"], median)
+    
+```{r}
 
 
 ## What is the average daily activity pattern?
-
+```{r echo = TRUE}
+      s <-split(data,data$"interval")
+      tb = lapply(s, function(x) colMeans(x[,c("steps","interval")], na.rm = TRUE))
+      df<-data.frame(Reduce(rbind, tb))
+      colnames(df) <- c("MeansOfSteps","Intervals")
+      plot(df$"Intervals", df$"MeansOfSteps", xlab= "Intervals", ylab= "Mean of Steps per Interval", type='l', col='red') 
+      title(main="What is the average daily activity pattern?", col.main="black", font.main=4)
+      
+      ##Maximum Number of Steps per Interval
+      df[which.max(df$"MeansOfSteps"),]
+```{r}
 
 
 ## Imputing missing values
+```{r echo = TRUE}
+   ##Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with      NAs)
+      sum(is.na(data))
+  ##Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be    sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval,   etc.
+  ## and Create a new dataset that is equal to the original dataset but with the missing data filled in.
+      data[is.na(data),1]<-0
+  ##Make a histogram of the total number of steps taken each day and Calculate and report the mean and median      total number of steps taken per day. Do these values differ from the estimates from the first part of the        assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+      s <-split(data,data$"date")
+      tb = lapply(s, function(x) colSums(x[,c("steps","interval")], na.rm = FALSE))
+      df<-data.frame(Reduce(rbind, tb))
+      colnames(df) <- c("SumOfSteps","Interval")
+      hist(df$"SumOfSteps", 
+      main="Histogram of total number of steps taken per day during two months", 
+      xlab="Number of steps", 
+      xlim=c(0, 22000),
+      border="blue", 
+      col="green",
+      breaks=22,
+      las=1)
+    
+      ##Mean of steps
+        by(data[, "steps"], data[, "date"], mean)
+     
+      ##Median of steps
+        by(data[, "steps"], data[, "date"], median)
+     
+     ## Yes, all values including histogram change due to imputing the NA values
 
+```{r}
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r echo = TRUE}
+```{r}
